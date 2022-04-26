@@ -87,7 +87,7 @@
                                     </div>
                                     <div class="col-md-4 col-md-pull-7">
                                         <div class="booking-form">
-                                            <form action="ajouterlogement.php" method='POST'>
+                                            <form action="ajouterlog.php" method='POST'>
                                                 <div class="form-group">
                                                     <span class="form-label">Your ID</span>
                                                     <input class="form-control" type="text" placeholder="Entrez votre numero du catre d'identiter" minlength="5" maxlength="8" size="10">
@@ -108,12 +108,21 @@
                                                     </div>
                                                 </div>
 
-    
-                                               
-                                                <div class="form-group">
-                                                    <span class="form-label">Your Destination</span>
-                                                    <input class="form-control" type="text" placeholder="Enter a destination or hotel name">
+
+                                                <div class="col-sm-6">
+                                                    <div class="form-group">
+                                                        <span class="form-label">Veuillez selectionnez le lieu de logement</span>                                                        <select name="type_log" id="type_log-select">
+                                                            <option value="">--Please choose an option--</option>
+                                                            <option value="hotel">HOTEL</option>
+                                                            <option value="camp">CAMP</option>
+                                                            <option value="maison d'hote">MAISON D'HOTE</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
+                                            </div>
+
+                                                   
+                                            
                                                 <div class="row">
                                                     <div class="col-sm-6">
                                                         <div class="form-group">
@@ -131,7 +140,7 @@
                                                 <div class="row">
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <span class="form-label">Rooms</span>
+                                                            <span class="form-label" minlength="1" maxlength="2" size="10">Rooms</span>
                                                             <select class="form-control">
                                                                 <option>1</option>
                                                                 <option>2</option>
@@ -142,7 +151,7 @@
                                                     </div>
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
-                                                            <span class="form-label">Adults</span>
+                                                            <span class="form-label" minlength="1" maxlength="2" size="10">Adults</span>
                                                             <select class="form-control">
                                                                 <option>1</option>
                                                                 <option>2</option>
@@ -154,7 +163,9 @@
                                                 
                                                 </div>
                                                 <div class="form-btn">
-                                                    <button class="submit-btn">Check availability</button>
+                                                    <a href="confirmation.html" class="nav-item nav-link">confirmation</a>
+                                                    <br><br>
+                                                      <button type="submit">Reserver </button>   
                                                 </div>
                                             </form>
                                         </div>
@@ -174,21 +185,12 @@
            
 
 
-<label for="type_log-select">Veuillez selectionnez le lieu de logement:</label>
 
-<select name="type_log" id="type_log-select">
-    <option value="">--Please choose an option--</option>
-    <option value="hotel">HOTEL</option>
-    <option value="camp">CAMP</option>
-    <option value="maison d'hote">MAISON D'HOTE</option>
-</select>
 
 
 
   
-<a href="confirmation.html" class="nav-item nav-link">confirmation</a>
-            <br><br>
-                <button type="submit">Reserver </button>                 
+              
             
                 </form>
 
