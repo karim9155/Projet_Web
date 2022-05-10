@@ -1,42 +1,107 @@
+<?php include('config.php'); ?>
+
 <!DOCTYPE html>
 <html>
 <head>
-	<title> Google Maps </title>
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-	<script type="text/javascript" src="js/googlemap.js"></script>
-	<style type="text/css">
-		.container {
-			height: 450px;
-		}
-		#map {
-			width: 100%;
-			height: 100%;
-			border: 1px solid blue;
-		}
-		#data, #allData {
-			display: none;
-		}
-	</style>
-</head>
-<body>
-	<div class="container">
-		<center><h1>Access Google Maps API in PHP</h1></center>
-		<?php 
-			require 'education.php';
-			$edu = new education;
-			$coll = $edu->getCollegesBlankLatLng();
-			$coll = json_encode($coll, true);
-			echo '<div id="data">' . $coll . '</div>';
+  <title>Loading Markers from MySQL Database and Display Them on Google Maps</title>
+  <style>
+  #map{
+    background: #ccc;
+    height: 600px;
+    width: 800px;
+    margin: auto;
+  }
 
-			$allData = $edu->getAllColleges();
-			$allData = json_encode($allData, true);
-			echo '<div id="allData">' . $allData . '</div>';			
-		 ?>
-		<div id="map"></div>
-	</div>
+  .marker-desc{
+    width: 300px;
+    min-height: 40px;
+    text-align: justify;
+    color: #333;
+    font-size: 14px;
+  }
+
+  .button-map{
+    background: #333;
+    color: #fff;
+    border: 1px solid #333;
+    border-radius: 20px;
+    padding: 10px 30px;
+    margin-bottom: 20px;
+  }
+
+  .button-map:hover{
+    cursor: pointer;
+    background: #fff;
+    color: #333;
+    transition: all 0.5s;
+  }
+  </style>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAvipLM2vFAwgLRnaw55gvaqAwkzg5VYg&callback=initMap" async defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+  <script>
+  var map_data;
+  var map;
+  var infoWindow;
+
+  function fetch_data(){
+    var response = '';
+    $.ajax({
+      type: "GET",
+      url: "map_data.php",
+      async: false,
+      success : function(text){
+        response = text;
+      }
+    });
+    return response;
+  }
+
+  map_data = jQuery.parseJSON(fetch_data());
+
+  function initMap(){
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: new google.maps.LatLng(36.806389, 10.181667),
+      zoom: 10  ,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+  }
+
+  function map_function(){
+    infoWindow = new google.maps.InfoWindow();
+    //Adding Markers
+    for(var i=0;  i<map_data.length; i++){
+      var data = map_data[i];
+      latLng = new google.maps.LatLng(data.track_lat, data.track_lng);
+
+      var marker = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        title: data.rider_id 
+      });
+      
+
+      (function (marker, data) {
+        google.maps.event.addListener(marker, "click", function (e) {
+          //Wrap the content inside an HTML DIV in order to set height and width of InfoWindow.
+          infoWindow.setContent("<div class = 'marker-desc'>" + data.rider_id + "</div>");
+          infoWindow.open(map, marker);
+        });
+      })(marker, data);
+
+    }
+
+  }
+  </script>
+
+</head>
+
+<body>
+
+<center><button class="button-map" onclick="map_function()">Load Data</button></center>
+
+<div id="map"></div>
+
 </body>
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key={your api key}&callback=loadMap">
-</script>
 </html>

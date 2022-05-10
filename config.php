@@ -1,20 +1,32 @@
 <?php
-  class config {
-    private static $pdo = NULL;
 
-    public static function getConnexion() {
-      if (!isset(self::$pdo)) {
-        try{
-          self::$pdo = new PDO('mysql:host=localhost;dbname=ephoriafest', 'root', '',
-          [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-        ]);
-          
-        }catch(Exception $e){
-          die('Erreur: '.$e->getMessage());
-        }
-      }
-      return self::$pdo;
-    }
+define('HOST', 'localhost');
+define('USERNAME', 'root');
+define('PASSWORD', '');
+define('DBNAME', 'make-up');
+
+
+function get_db(){
+  try{
+    $db = new PDO( 'mysql:host=' . HOST  . '; dbname=' . DBNAME . ';charset=utf8', USERNAME, PASSWORD );
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    return $db;
+  }catch(PDOExecption $e){
+    echo 'Connection Failed: ' . $e->getMessage();
   }
+}
+
+function get_map_data(){
+  try{
+    $db=get_db();
+    $stmt = $db->query("SELECT rider_id, track_time , track_lng, track_lat FROM gps_track");
+    $data = $stmt->fetchAll();
+    return json_encode($data);
+  }catch(PDOExecption $e){
+    return 'Error: ' . $e->getMessage();
+  }
+}
+
+
+?>
